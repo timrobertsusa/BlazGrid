@@ -1,0 +1,56 @@
+@page "/qgrid"
+@rendermode InteractiveAuto
+@* @using System.Text.Json *@
+@using Bogus
+
+<h3>Quick Grid Page</h3>
+
+<QuickGrid Items="@people">
+    <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.FirstName)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.LastName)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.StartDate)" Format="yyyy-MM-dd" Sortable="true" />
+</QuickGrid>
+
+@code {
+    private record PersonRecord(int Id, string FirstName, string LastName, DateOnly StartDate);
+
+    @* private IQueryable<PersonRecord> people = new[]
+{
+new PersonRecord(5, "Tim", "Corey", new DateOnly(2020,3,1)),
+new PersonRecord(3, "Sue", "Storm", new DateOnly(2021,4,1)),
+new PersonRecord(2, "Jane", "Smith", new DateOnly(2019,2,1)),
+new PersonRecord(1, "Bob", "Smith", new DateOnly(2018,11,1)),
+new PersonRecord(4, "Jim", "Arnold", new DateOnly(2023,8,1))
+}.AsQueryable(); *@
+
+    private IQueryable<PersonRecord>? people;
+
+    @* protected override async Task OnInitializedAsync()
+    {
+        var json = await File.ReadAllTextAsync("path_to_your_json_file.json");
+        var personRecords = JsonSerializer.Deserialize<List<PersonRecord>>(json);
+        people = personRecords!.AsQueryable();
+        
+    } *@
+
+     protected override void OnInitialized()
+    {
+        DateTime startDate = new DateTime(1995, 06, 26);
+        DateTime endDate = DateTime.Now;
+
+        var testUsers = new Bogus.Faker<PersonRecord>()
+            .RuleFor(u => u.Id, f => f.Random.Int(1, 100))
+            .RuleFor(u => u.FirstName, f => f.Name.FirstName())
+            .RuleFor(u => u.LastName, f => f.Name.LastName())
+            .RuleFor(u => u.StartDate, (f,u) => (u.StartDate, f.Date.Between(startDate, endDate))     )
+            .Generate(50);
+
+        people = testUsers.AsQueryable();
+    }
+}
+//f.Date.Between(startDate, endDate)
+//.RuleFor(u => u.StartDate, f => f.Date.Between(startDate, endDate))     
+faker.Date.Between(new DateTime(2022, 1, 1),
+    new DateTime(2025, 1, 1)));
+// .RuleFor(u => u.StartDate, f => f.Date.Past(22, DateTime.Now))                   
