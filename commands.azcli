@@ -7,3 +7,5 @@ dotnet add package Microsoft.AspNetCore.Components.QuickGrid --version 8.0.1
 dotnet add package Bogus --version 35.4.0
 
 dotnet remove package Bogus
+
+dotnet new console -o bfake 

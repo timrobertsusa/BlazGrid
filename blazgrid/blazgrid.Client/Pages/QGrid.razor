@@ -14,6 +14,13 @@
 
 @code {
     private record PersonRecord(int Id, string FirstName, string LastName, DateOnly StartDate);
+    private class PersonClass
+{
+    public int Id { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public DateTime StartDate { get; set; }
+}
 
     @* private IQueryable<PersonRecord> people = new[]
 {
@@ -24,7 +31,7 @@ new PersonRecord(1, "Bob", "Smith", new DateOnly(2018,11,1)),
 new PersonRecord(4, "Jim", "Arnold", new DateOnly(2023,8,1))
 }.AsQueryable(); *@
 
-    private IQueryable<PersonRecord>? people;
+    private IQueryable<PersonClass>? people;
 
     @* protected override async Task OnInitializedAsync()
     {
@@ -39,11 +46,11 @@ new PersonRecord(4, "Jim", "Arnold", new DateOnly(2023,8,1))
         DateTime startDate = new DateTime(1995, 06, 26);
         DateTime endDate = DateTime.Now;
 
-        var testUsers = new Bogus.Faker<PersonRecord>()
+        var testUsers = new Bogus.Faker<PersonClass>()
             .RuleFor(u => u.Id, f => f.Random.Int(1, 100))
             .RuleFor(u => u.FirstName, f => f.Name.FirstName())
             .RuleFor(u => u.LastName, f => f.Name.LastName())
-            .RuleFor(u => u.StartDate, (f,u) => (u.StartDate, f.Date.Between(startDate, endDate))     )
+            .RuleFor(u => u.StartDate, f => f.Date.Past(22, DateTime.Now))     
             .Generate(50);
 
         people = testUsers.AsQueryable();
