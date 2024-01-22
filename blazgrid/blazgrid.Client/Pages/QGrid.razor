@@ -45,9 +45,9 @@ new PersonRecord(4, "Jim", "Arnold", new DateOnly(2023,8,1))
     {
         DateTime startDate = new DateTime(1995, 06, 26);
         DateTime endDate = DateTime.Now;
-
+        int SeedKey = 1000;
         var testUsers = new Bogus.Faker<PersonClass>()
-            .RuleFor(u => u.Id, f => f.Random.Int(1, 100))
+            .RuleFor(u => u.Id, f => ++SeedKey)
             .RuleFor(u => u.FirstName, f => f.Name.FirstName())
             .RuleFor(u => u.LastName, f => f.Name.LastName())
             .RuleFor(u => u.StartDate, f => f.Date.Past(22, DateTime.Now))     
@@ -56,8 +56,9 @@ new PersonRecord(4, "Jim", "Arnold", new DateOnly(2023,8,1))
         people = testUsers.AsQueryable();
     }
 }
-//f.Date.Between(startDate, endDate)
-//.RuleFor(u => u.StartDate, f => f.Date.Between(startDate, endDate))     
+
+@* f.Date.Between(startDate, endDate)
+.RuleFor(u => u.StartDate, f => f.Date.Between(startDate, endDate))     
 faker.Date.Between(new DateTime(2022, 1, 1),
     new DateTime(2025, 1, 1)));
-// .RuleFor(u => u.StartDate, f => f.Date.Past(22, DateTime.Now))                   
+ .RuleFor(u => u.StartDate, f => f.Date.Past(22, DateTime.Now))                    *@
