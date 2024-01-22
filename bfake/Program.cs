@@ -18,9 +18,13 @@ internal class Program
         List<PersonClass> people;
         DateTime startDate = new DateTime(1995, 06, 26);
         DateTime endDate = DateTime.Now;
-
-        var testUsers = new Bogus.Faker<PersonClass>()
-            .RuleFor(u => u.Id, f => f.Random.Int(1, 100))
+        int cat = 0;
+        Console.WriteLine($"cat {cat}");
+        Console.WriteLine($"cat {++cat}");
+        int dog = 1000;
+        var testUsers = new Bogus.Faker<PersonClass>()            
+            // .RuleFor(u => u.Id, f => f.Random.Int(1, 100))
+            .RuleFor(u => u.Id, f => ++dog)
             .RuleFor(u => u.FirstName, f => f.Name.FirstName())
             .RuleFor(u => u.LastName, f => f.Name.LastName())
             // .RuleFor(u => u.StartDate, f => f.Date.Between(startDate, endDate))
@@ -28,6 +32,13 @@ internal class Program
             .Generate(5);
 
         people = testUsers;
+
+        Console.WriteLine("Class");
+
+        foreach (var item in people)
+        {
+            Console.WriteLine($"{item.Id} {item.FirstName} {item.LastName} {item.StartDate}");
+        }
     }
 }
 
