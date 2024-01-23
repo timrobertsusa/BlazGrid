@@ -1,0 +1,47 @@
+@page "/qgrid2"
+@rendermode InteractiveAuto
+@using Bogus
+
+<h3>Quick Grid Page</h3>
+
+@* @inject QDataService myTestDI *@
+
+@inject QDataService myBogusGridData
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, my world in quickgrid page!</h1>
+<h2>My Test DI says: @myBogusGridData.GiveRandomNumber()</h2>
+Welcome to your new app.
+
+<QuickGrid Items="@people">
+    <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.FirstName)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.LastName)" Sortable="true" />
+    <PropertyColumn Property="@(p => p.StartDate)" Format="yyyy-MM-dd" Sortable="true" />
+</QuickGrid>
+
+@code {
+    private record PersonRecord(int Id, string FirstName, string LastName, DateOnly StartDate);
+    private class PersonClass
+    {
+        public int Id { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public DateTime StartDate { get; set; }
+    }
+    private IQueryable<PersonClass>? people;  
+
+    protected override void OnInitialized()
+    {       
+        int SeedKey = 1000;
+        var testUsers = new Bogus.Faker<PersonClass>()
+        .RuleFor(u => u.Id, f => ++SeedKey)
+        .RuleFor(u => u.FirstName, f => f.Name.FirstName())
+        .RuleFor(u => u.LastName, f => f.Name.LastName())
+        .RuleFor(u => u.StartDate, f => f.Date.Past(22, DateTime.Now))
+        .Generate(50);
+
+        people = testUsers.AsQueryable();
+    }
+}

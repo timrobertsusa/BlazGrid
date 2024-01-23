@@ -9,7 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddSingleton<myTestDependency>();
+builder.Services.AddSingleton<QDataService>();
 
 var app = builder.Build();
 
