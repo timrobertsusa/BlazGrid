@@ -1,0 +1,10 @@
+﻿namespace SharedLib;
+
+public class myTestDependency
+{
+    public string GiveRandomNumber()
+    {
+        int randomValue = Random.Shared.Next(1,100);
+        return $"The value is {randomValue}";
+    }
+}
